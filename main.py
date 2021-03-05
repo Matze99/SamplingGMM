@@ -5,22 +5,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def sample_norm():
-    d = np.random.uniform(0, 1, size=(1000, 100000))
-    d = np.mean(d, axis=1)
-    # An "interface" to matplotlib.axes.Axes.hist() method
-    n, bins, patches = plt.hist(x=d, bins='auto', color='#0504aa',
-                                alpha=0.7, rwidth=0.85)
-    plt.grid(axis='y', alpha=0.75)
-    plt.xlabel('Value')
-    plt.ylabel('Frequency')
-    plt.title('My Very Own Histogram')
-    plt.text(23, 45, r'$\mu=15, b=3$')
-    maxfreq = n.max()
-    # Set a clean upper y-axis limit.
-    plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
-    plt.show()
-
 def normal(value):
     return 1/np.sqrt(2*np.pi)* np.exp(-value**2/2)
 
@@ -48,14 +32,14 @@ def plot_sample_uniform_gaussian_inverse_map():
     plt.xlabel('x')
 
     plt.show()
-    fig.savefig('../../Portfolio/sigmoid_map_vs_normal.png')
+    # fig.savefig('../../Portfolio/sigmoid_map_vs_normal.png')
 
 def plot_monte_carlo_inv_sigmoid_map():
     fig = plt.figure()
     x = np.linspace(-5, 5, 201)
     y = normal(x)
 
-    size = 2000000
+    size = 2000
     y_s = np.random.uniform(0, 1, size=size)
     x_s = inv_sigmoid(y_s)
     y_samp = np.random.uniform(0, 1, size=size)
@@ -81,7 +65,7 @@ def plot_central_limit_theorem_sigmoid_map():
     x = np.linspace(-5, 5, 201)
     y = normal(x)
 
-    y_s = np.random.uniform(0, 1, size=(2000, 3))
+    y_s = np.random.uniform(0, 1, size=(200, 3))
     x_s = np.mean(inv_sigmoid(y_s), axis=1)
 
     n, bins, patches = plt.hist(x=x_s, bins='auto', color='r',
@@ -114,7 +98,7 @@ def plot_central_limit_theorem_sigmoid_map_non_normal(mean=0, variance=1):
     plt.xlabel('x')
 
     plt.show()
-    fig.savefig('../../Portfolio/shifted_gaussian.png')
+    # fig.savefig('../../Portfolio/shifted_gaussian.png')
 
 def plot_central_limit_vs_monte_carlo():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10,5))
@@ -150,7 +134,7 @@ def plot_central_limit_vs_monte_carlo():
     ax1.set_xlabel('x')
     ax2.set_xlabel('x')
     plt.show()
-    fig.savefig('../../Portfolio/monte_carlo_vs_central_limit.png')
+    # fig.savefig('../../Portfolio/monte_carlo_vs_central_limit.png')
 
 def plot_norm_plus_sample():
     x = np.linspace(-5,5,201)
@@ -217,7 +201,6 @@ def plot_multivariate_gaussian():
     plt.show()
     # fig.savefig('../../Portfolio/shifted_gaussian.png')
 
-
 def plot_gaussian_mixture_model():
     mus = [np.array([0, 1]), np.array([20, 1]), np.array([-3, 3])]
     covs = [np.array([[1, 2], [2, 1]]), np.array([[1, 0], [0, 1]]), np.array([[10, 1], [1, 0.3]])]
@@ -263,7 +246,7 @@ def plot_gaussian_mixture_model():
     plt.ylabel('x2')
     plt.xlabel('x1')
     plt.show()
-    fig.savefig('../../Portfolio/samples_gmm_2.png')
+    # fig.savefig('../../Portfolio/samples_gmm_2.png')
 
 def gmm(value, pis, means, variances):
     density = np.zeros(value.shape)
@@ -313,19 +296,26 @@ def plot_1D_gaussian_mixture_model():
     plt.ylabel('p(x)')
     plt.legend()
     plt.show()
-    fig.savefig('../../Portfolio/1D_gmm_sample.png')
-
-
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-    plot_gaussian_mixture_model()
+    # fig.savefig('../../Portfolio/1D_gmm_sample.png')
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # plot histogram of uniform sample mapped to R with sigmoid map
+    plot_sample_uniform_gaussian_inverse_map()
+    # plot histogram of monte carlo sampled (uniform samples mapped to R with sigmoid)
+    plot_monte_carlo_inv_sigmoid_map()
+    # histogram of mean of 3 sigmoid mapped uniform samples
+    plot_central_limit_theorem_sigmoid_map()
+    # plot non normal gaussian samples
+    plot_central_limit_theorem_sigmoid_map_non_normal(mean=0, variance=1)
+    # plot central limit sampling and mote carlo sampling with a lot of samples
+    plot_central_limit_vs_monte_carlo()
+    # plot previous sampling strategies in one image
+    plot_norm_plus_sample()
+    # plot samples from multivariate gaussian
+    plot_multivariate_gaussian()
+    # plot samples from gaussian mixture model
+    plot_gaussian_mixture_model()
+    # plot samples from 1D gaussian mixture mdodel
+    plot_1D_gaussian_mixture_model()
